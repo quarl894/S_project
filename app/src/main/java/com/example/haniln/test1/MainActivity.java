@@ -24,13 +24,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private final int FOLDER_CODE = 1112;
     RecyclerView mRecyclerView;
     LinearLayoutManager mLayoutManager;
     RecyclerViewAdapter mAdapter;
     Button btn_upload;
+    public static ArrayList<item> arr= new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new item(R.color.green,"FFA170728103225026201810","5", "생산팀"));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new RecyclerViewAdapter(items);
+        mAdapter = new RecyclerViewAdapter(arr);
         mRecyclerView.setAdapter(mAdapter);
 
         btn_upload = findViewById(R.id.btn_upload);
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getFile();
+
             }
         });
 
@@ -77,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
                 .check();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter = new RecyclerViewAdapter(arr);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     //폴더 위치 후 열기.
     private void getFile(){
         Uri uri = Uri.parse(Environment.getDataDirectory().getPath()); //처음 폴더 위치
@@ -91,10 +102,14 @@ public class MainActivity extends AppCompatActivity {
     public String ReadTextFile(String path){
         StringBuffer strBuffer = new StringBuffer();
         try{
+            arr.clear();
             InputStream is = new FileInputStream(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line="";
+            int count = 0;
             while((line=br.readLine())!=null){
+                String[] sp = line.split("\t");
+                arr.add(new item(R.color.green, sp[0],sp[1],sp[2]));
                 strBuffer.append(line+"\n");
             }
             br.close();
@@ -108,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK){
@@ -125,8 +140,7 @@ public class MainActivity extends AppCompatActivity {
             String str = ReadTextFile(stk.toString());
             Log.e("msg: ",str);
             //tv_txt.setText(str);
-
-            Log.e("path: ", stk.toString());
+           // Log.e("path: ", stk.toString());
         }
     }
 }
