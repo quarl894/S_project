@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity{
     LinearLayoutManager mLayoutManager;
     RecyclerViewAdapter mAdapter;
     Button btn_upload;
+    ImageButton btn_setting;
     public static ArrayList<item> arr= new ArrayList<>();
 
     @Override
@@ -41,13 +43,21 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView = findViewById(R.id.recyclerview);
         mLayoutManager = new LinearLayoutManager(this);
 
-
-        ArrayList<item> items = new ArrayList();
-        items.add(new item(R.color.green,"FFA170728103225026201810","1", "설비팀"));
-        items.add(new item(R.color.black,"FFA170728103225026201810","2", "설비팀"));
-        items.add(new item(R.color.green,"FFA170728103225026201810","3", "생산팀"));
-        items.add(new item(R.color.black,"FFA170728103225026201810","4", "운영팀"));
-        items.add(new item(R.color.green,"FFA170728103225026201810","5", "생산팀"));
+        btn_setting = findViewById(R.id.btn_setting);
+        btn_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arr.clear();
+                mAdapter = new RecyclerViewAdapter(arr);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        });
+//        ArrayList<item> items = new ArrayList();
+//        items.add(new item(R.color.green,"FFA170728103225026201810","1", "설비팀"));
+//        items.add(new item(R.color.black,"FFA170728103225026201810","2", "설비팀"));
+//        items.add(new item(R.color.green,"FFA170728103225026201810","3", "생산팀"));
+//        items.add(new item(R.color.black,"FFA170728103225026201810","4", "운영팀"));
+//        items.add(new item(R.color.green,"FFA170728103225026201810","5", "생산팀"));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new RecyclerViewAdapter(arr);
