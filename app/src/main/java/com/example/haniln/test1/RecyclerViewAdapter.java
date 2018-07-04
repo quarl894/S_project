@@ -46,9 +46,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerViewHolder holder, final int position) {
         // 해당 position 에 해당하는 데이터 결합
         holder.img.setImageResource(mItems.get(position).img);
-        holder.tv_code.setText(mItems.get(position).code);
-        holder.tv_gear.setText(mItems.get(position).gear);
-        holder.tv_name.setText(mItems.get(position).name);
+        holder.tv_code.setText(mItems.get(position).zcode);
+        holder.tv_gear.setText(mItems.get(position).zday);
+        holder.tv_name.setText(mItems.get(position).zdpt4);
 
         // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
         holder.itemView.setOnClickListener(new View.OnClickListener() {

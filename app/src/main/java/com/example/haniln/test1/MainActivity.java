@@ -121,11 +121,13 @@ public class MainActivity extends AppCompatActivity{
             int count = 0;
             while((line=br.readLine())!=null){
                 String[] sp = line.split("\t");
-                arr.add(new item(R.color.green, sp[0],sp[1],sp[2]));
+                Log.e("test: ", sp[0]);
+                Log.e("test2 : ", line);
+                arr.add(new item(R.color.green, sp[0],sp[1],sp[2],sp[3],sp[4],sp[5],sp[6],sp[7],sp[8],sp[9]));
                 strBuffer.append(line+"\n");
             }
             for(int i=0; i<arr.size(); i++){
-                dbHelper.insert(arr.get(i).img, arr.get(i).code, arr.get(i).gear, arr.get(i).name);
+                dbHelper.insert(arr.get(i).img, arr.get(i).zcode, arr.get(i).zname, arr.get(i).zmodel,arr.get(i).zserial, arr.get(i).zmaker, arr.get(i).zday, arr.get(i).zdpt1, arr.get(i).zdpt2, arr.get(i).zdpt3, arr.get(i).zdpt4);
             }
             Log.e("db_size:", "" + dbHelper.get_item().size());
             br.close();
