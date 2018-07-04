@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.haniln.test1.DB.DBHelper;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity{
     Button btn_upload;
     ImageButton btn_setting;
     public static ArrayList<item> arr= new ArrayList<>();
+    private ArrayList<item> get_item = new ArrayList<>();
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +46,18 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView = findViewById(R.id.recyclerview);
         mLayoutManager = new LinearLayoutManager(this);
 
+        dbHelper = new DBHelper(getApplicationContext());
+//        get_item = dbHelper.get_item();
+//        Log.e("get_item: ", "" + get_item.size());
         btn_setting = findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 arr.clear();
-                mAdapter = new RecyclerViewAdapter(arr);
+                mAdapter = new RecyclerViewAdapter(get_item);
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
-//        ArrayList<item> items = new ArrayList();
-//        items.add(new item(R.color.green,"FFA170728103225026201810","1", "설비팀"));
-//        items.add(new item(R.color.black,"FFA170728103225026201810","2", "설비팀"));
-//        items.add(new item(R.color.green,"FFA170728103225026201810","3", "생산팀"));
-//        items.add(new item(R.color.black,"FFA170728103225026201810","4", "운영팀"));
-//        items.add(new item(R.color.green,"FFA170728103225026201810","5", "생산팀"));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new RecyclerViewAdapter(arr);
@@ -112,7 +112,9 @@ public class MainActivity extends AppCompatActivity{
     public String ReadTextFile(String path){
         StringBuffer strBuffer = new StringBuffer();
         try{
+            //초기화
             arr.clear();
+            dbHelper.db_clear();
             InputStream is = new FileInputStream(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line="";
@@ -122,6 +124,10 @@ public class MainActivity extends AppCompatActivity{
                 arr.add(new item(R.color.green, sp[0],sp[1],sp[2]));
                 strBuffer.append(line+"\n");
             }
+            for(int i=0; i<arr.size(); i++){
+                dbHelper.insert(arr.get(i).img, arr.get(i).code, arr.get(i).gear, arr.get(i).name);
+            }
+            Log.e("db_size:", "" + dbHelper.get_item().size());
             br.close();
             is.close();
         }catch (IOException e){
@@ -148,7 +154,7 @@ public class MainActivity extends AppCompatActivity{
             //Log.e("result: ", stk.toString());
 
             String str = ReadTextFile(stk.toString());
-            Log.e("msg: ",str);
+            //Log.e("msg: ",str);
             //tv_txt.setText(str);
            // Log.e("path: ", stk.toString());
         }
