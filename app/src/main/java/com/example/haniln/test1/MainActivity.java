@@ -21,11 +21,17 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity{
@@ -33,11 +39,13 @@ public class MainActivity extends AppCompatActivity{
     RecyclerView mRecyclerView;
     LinearLayoutManager mLayoutManager;
     RecyclerViewAdapter mAdapter;
-    Button btn_upload;
+    Button btn_upload, btn_download;
     ImageButton btn_setting;
     public static ArrayList<item> arr= new ArrayList<>();
     private ArrayList<item> get_item = new ArrayList<>();
     DBHelper dbHelper;
+    static String content = "";
+    final static String foldername = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/S_asset";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,8 @@ public class MainActivity extends AppCompatActivity{
         dbHelper = new DBHelper(getApplicationContext());
 //        get_item = dbHelper.get_item();
 //        Log.e("get_item: ", "" + get_item.size());
+
+        final String fname =new SimpleDateFormat("yy-MM-dd HH-mm-ss").format(new Date()) + "asset.txt";
         btn_setting = findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +66,14 @@ public class MainActivity extends AppCompatActivity{
                 arr.clear();
                 mAdapter = new RecyclerViewAdapter(get_item);
                 mRecyclerView.setAdapter(mAdapter);
+            }
+        });
+        btn_download = findViewById(R.id.btn_download);
+        btn_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(content!=null || !content.equals("")) WriteTextFiles(foldername,fname, content);
+                else Toast.makeText(getApplicationContext(), "업로드를 먼저 해주세요.",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -121,8 +139,8 @@ public class MainActivity extends AppCompatActivity{
             int count = 0;
             while((line=br.readLine())!=null){
                 String[] sp = line.split("\t");
-                Log.e("test: ", sp[0]);
-                Log.e("test2 : ", line);
+//                Log.e("test: ", sp[0]);
+//                Log.e("test2 : ", line);
                 arr.add(new item(R.color.green, sp[0],sp[1],sp[2],sp[3],sp[4],sp[5],sp[6],sp[7],sp[8],sp[9]));
                 strBuffer.append(line+"\n");
             }
@@ -155,10 +173,27 @@ public class MainActivity extends AppCompatActivity{
             stk.append("/"+s);
             //Log.e("result: ", stk.toString());
 
-            String str = ReadTextFile(stk.toString());
+            content = ReadTextFile(stk.toString());
+
             //Log.e("msg: ",str);
             //tv_txt.setText(str);
            // Log.e("path: ", stk.toString());
+        }
+    }
+
+    public void WriteTextFiles(String foname, String fname, String contents){
+        try{
+            File dir = new File(foname);
+            if(!dir.exists()){
+                dir.mkdir();
+            }
+            FileOutputStream fos = new FileOutputStream(foname + "/" + fname, true);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            bw.write(contents);
+            bw.close();
+            fos.close();
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 }
