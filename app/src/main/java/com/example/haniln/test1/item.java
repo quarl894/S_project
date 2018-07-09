@@ -3,13 +3,14 @@ package com.example.haniln.test1;
 public class item {
     int img;
     String zcode, zname, zmodel, zserial, zmaker, zday, zdpt1, zdpt2, zdpt3, zdpt4;
+    String etc;
 
 //    String code;
 //    String gear;
 //    String name;
 
 
-    public item(int img, String zcode, String zname, String zmodel, String zserial, String zmaker, String zday, String zdpt1, String zdpt2, String zdpt3, String zdpt4) {
+    public item(int img, String zcode, String zname, String zmodel, String zserial, String zmaker, String zday, String zdpt1, String zdpt2, String zdpt3, String zdpt4, String etc) {
         this.img = img;
         this.zcode = zcode;
         this.zname = zname;
@@ -21,6 +22,7 @@ public class item {
         this.zdpt2 = zdpt2;
         this.zdpt3 = zdpt3;
         this.zdpt4 = zdpt4;
+        this.etc = etc;
     }
 
     public int getImg() {
@@ -65,5 +67,9 @@ public class item {
 
     public String getZdpt4() {
         return zdpt4;
+    }
+
+    public String getEtc() {
+        return etc;
     }
 }

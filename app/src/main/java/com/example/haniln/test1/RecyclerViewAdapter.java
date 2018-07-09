@@ -23,6 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView tv_code;
         public TextView tv_gear;
         public TextView tv_name;
+        public TextView tv_etc;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -30,6 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_code = itemView.findViewById(R.id.code);
             tv_gear = itemView.findViewById(R.id.gear);
             tv_name = itemView.findViewById(R.id.name);
+            tv_etc = itemView.findViewById(R.id.etc);
         }
     }
 
@@ -47,8 +49,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // 해당 position 에 해당하는 데이터 결합
         holder.img.setImageResource(mItems.get(position).img);
         holder.tv_code.setText(mItems.get(position).zcode);
-        holder.tv_gear.setText(mItems.get(position).zday);
+        holder.tv_gear.setText(mItems.get(position).zname);
         holder.tv_name.setText(mItems.get(position).zdpt4);
+        holder.tv_etc.setText(mItems.get(position).etc);
 
         // 이벤트처리 : 생성된 List 중 선택된 목록번호를 Toast로 출력
         holder.itemView.setOnClickListener(new View.OnClickListener() {

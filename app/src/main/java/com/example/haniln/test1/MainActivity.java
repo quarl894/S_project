@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity{
 //        get_item = dbHelper.get_item();
 //        Log.e("get_item: ", "" + get_item.size());
 
-        final String fname =new SimpleDateFormat("yy-MM-dd HH-mm-ss").format(new Date()) + "asset.txt";
+
         btn_setting = findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +72,10 @@ public class MainActivity extends AppCompatActivity{
         btn_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(content!=null || !content.equals("")) WriteTextFiles(foldername,fname, content);
+                if(content!=""){
+                    final String fname =new SimpleDateFormat("yy-MM-dd HH-mm-ss").format(new Date()) + "asset.txt";
+                    WriteTextFiles(foldername,fname, content);
+                }
                 else Toast.makeText(getApplicationContext(), "업로드를 먼저 해주세요.",Toast.LENGTH_SHORT).show();
             }
         });
@@ -86,7 +89,6 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 getFile();
-
             }
         });
 
@@ -128,7 +130,8 @@ public class MainActivity extends AppCompatActivity{
 
     //경로의 텍스트 파일읽기
     public String ReadTextFile(String path){
-        StringBuffer strBuffer = new StringBuffer();
+        StringBuilder st = new StringBuilder();
+//        StringBuffer strBuffer = new StringBuffer();
         try{
             //초기화
             arr.clear();
@@ -141,11 +144,12 @@ public class MainActivity extends AppCompatActivity{
                 String[] sp = line.split("\t");
 //                Log.e("test: ", sp[0]);
 //                Log.e("test2 : ", line);
-                arr.add(new item(R.color.green, sp[0],sp[1],sp[2],sp[3],sp[4],sp[5],sp[6],sp[7],sp[8],sp[9]));
-                strBuffer.append(line+"\n");
+                arr.add(new item(R.color.green, sp[0],sp[1],sp[2],sp[3],sp[4],sp[5],sp[6],sp[7],sp[8],sp[9], ""));
+                st.append(line);
+                st.append("\n");
             }
             for(int i=0; i<arr.size(); i++){
-                dbHelper.insert(arr.get(i).img, arr.get(i).zcode, arr.get(i).zname, arr.get(i).zmodel,arr.get(i).zserial, arr.get(i).zmaker, arr.get(i).zday, arr.get(i).zdpt1, arr.get(i).zdpt2, arr.get(i).zdpt3, arr.get(i).zdpt4);
+                dbHelper.insert(arr.get(i).img, arr.get(i).zcode, arr.get(i).zname, arr.get(i).zmodel,arr.get(i).zserial, arr.get(i).zmaker, arr.get(i).zday, arr.get(i).zdpt1, arr.get(i).zdpt2, arr.get(i).zdpt3, arr.get(i).zdpt4, arr.get(i).etc);
             }
             Log.e("db_size:", "" + dbHelper.get_item().size());
             br.close();
@@ -155,7 +159,7 @@ public class MainActivity extends AppCompatActivity{
             Log.e("error:", "error");
             return "";
         }
-        return strBuffer.toString();
+        return st.toString();
     }
 
     @Override
@@ -172,12 +176,9 @@ public class MainActivity extends AppCompatActivity{
             s = s.replace("primary:","");
             stk.append("/"+s);
             //Log.e("result: ", stk.toString());
-
+            content = "";
             content = ReadTextFile(stk.toString());
-
-            //Log.e("msg: ",str);
-            //tv_txt.setText(str);
-           // Log.e("path: ", stk.toString());
+            Log.e("msg: ",content);
         }
     }
 

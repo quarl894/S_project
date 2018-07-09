@@ -15,7 +15,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "hospital";
     private static final String TABLE_erp = "tb_erp";
 
-    private static final String CREATE_TABLE_erp = "create table " + TABLE_erp + "(_index INTEGER PRIMARY KEY AUTOINCREMENT, chk Integer, zcode String, zname String, zmodel String, zserial String, zmaker String, zday String, zdpt1 String, zdpt2 String, zdpt3 String, zdpt4 String);";
+    private static final String CREATE_TABLE_erp = "create table " + TABLE_erp + "(_index INTEGER PRIMARY KEY AUTOINCREMENT, chk Integer, zcode String, zname String, zmodel String, zserial String, zmaker String, zday String, zdpt1 String, zdpt2 String, zdpt3 String, zdpt4 String, etc String);";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -33,12 +33,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_erp);
     }
 
-    public void insert(int chk, String zcode, String zname, String zmodel, String zserial, String zmaker, String zday, String zdpt1, String zdpt2, String zdpt3, String zdpt4) {
+    public void insert(int chk, String zcode, String zname, String zmodel, String zserial, String zmaker, String zday, String zdpt1, String zdpt2, String zdpt3, String zdpt4, String etc) {
         // 읽고 쓰기가 가능하게 DB 열기
         SQLiteDatabase db = getWritableDatabase();
         // DB에 입력한 값으로 행 추가
         db.execSQL("INSERT INTO " + TABLE_erp +
-                " VALUES(NULL, " + chk + ",'"+ zcode + "', '" + zname + "', '" + zmodel + "', '"+ zserial + "', '"+ zmaker + "','"+ zday + "', '"+ zdpt1 + "', '"+ zdpt2 + "', '"+ zdpt3 + "', '"+ zdpt4 +"');");
+                " VALUES(NULL, " + chk + ",'"+ zcode + "', '" + zname + "', '" + zmodel + "', '"+ zserial + "', '"+ zmaker + "','"+ zday + "', '"+ zdpt1 + "', '"+ zdpt2 + "', '"+ zdpt3 + "', '"+ zdpt4 + "', '"+ etc+"');");
         db.close();
     }
 
@@ -67,7 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<item> get_item(){
         SQLiteDatabase db = getReadableDatabase();
         String CREATE_tb = "create table if not exists "
-                + TABLE_erp + "(_index INTEGER PRIMARY KEY AUTOINCREMENT, chk Integer, zcode String, zname String, zmodel String, zserial String, zmaker String, zday String, zdpt1 String, zdpt2 String, zdpt3 String, zdpt4 String );";
+                + TABLE_erp + "(_index INTEGER PRIMARY KEY AUTOINCREMENT, chk Integer, zcode String, zname String, zmodel String, zserial String, zmaker String, zday String, zdpt1 String, zdpt2 String, zdpt3 String, zdpt4 String, etc String);";
         db.execSQL(CREATE_tb);
 
         Cursor cursor = db.rawQuery("SELECT * from " + TABLE_erp, null);
@@ -78,7 +78,7 @@ public class DBHelper extends SQLiteOpenHelper {
             ArrayList<item> arr = new ArrayList<>();
             while(cursor.moveToNext()){
                 arr.add(new item(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),
-                        cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10)));
+                        cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10), cursor.getString(11)));
             }
             cursor.close();
             db.close();
